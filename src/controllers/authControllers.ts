@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { IUserDetails } from '../types/interfaces';
 import { User } from '../models/userModel';
 import { z } from 'zod';
+import bcrypt from 'bcryptjs';
 
 // Create New User
 export const createUser = async (
@@ -10,15 +11,26 @@ export const createUser = async (
 	next: NextFunction,
 ) => {
 	try {
-		// Insert a single user
-		const newUser = new User(req.body);
+		const user = req.body;
+
+		const rawPassword = user.password;
+
+		// generate hashed password
+		const hashedPassword = await bcrypt.hash(rawPassword, 13);
+
+		user.password = hashedPassword;
+
+		const newUser = new User(user);
 		const savedUser = await newUser.save();
+
 		if (savedUser?._id) {
 			return res.status(201).send({
 				success: true,
 				insertedId: savedUser._id,
 				message: `${savedUser.name} is Created Successfully!`,
 			});
+		} else {
+			throw new Error('Cannot Create New User!');
 		}
 	} catch (error) {
 		if (error instanceof Error) {

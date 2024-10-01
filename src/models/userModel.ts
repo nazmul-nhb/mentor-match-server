@@ -19,6 +19,10 @@ export const UserSchema = new Schema<IUser>({
 		type: String,
 		required: [true, 'User Must Provide Image!'],
 	},
+	password: {
+		type: String,
+		required: [true, 'User Must Provide Password!'],
+	},
 	role: {
 		type: String,
 		enum: {

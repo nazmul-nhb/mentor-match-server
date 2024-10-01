@@ -1,6 +1,5 @@
 export interface IErrorObject extends Error {
 	status?: number;
-	code?: number;
 }
 
 export interface IUserDetails {
