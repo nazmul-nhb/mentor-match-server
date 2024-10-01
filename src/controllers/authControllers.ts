@@ -27,10 +27,10 @@ export const createUser = async (
 			return res.status(201).send({
 				success: true,
 				insertedId: savedUser._id,
-				message: `${savedUser.name} is Created Successfully!`,
+				message: `${savedUser.name} is Registered Successfully!`,
 			});
 		} else {
-			throw new Error('Cannot Create New User!');
+			throw new Error('Cannot Register New User!');
 		}
 	} catch (error) {
 		if (error instanceof Error) {
@@ -41,12 +41,14 @@ export const createUser = async (
 				});
 			}
 		}
+
 		if (error instanceof z.ZodError) {
 			return res.status(400).json({
 				success: false,
 				message: error.errors[0].message,
 			});
 		}
+		
 		next(error);
 	}
 };
