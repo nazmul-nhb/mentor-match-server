@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './configs/db';
 import { IErrorObject } from './types/interfaces';
-import exampleRoutes from './routes/exampleRoutes';
+import authRoutes from './routes/authRoutes';
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 // Actual Routes
-app.use('/example', exampleRoutes);
+app.use('/auth', authRoutes);
 
 // Error handler for 404
 app.use((req: Request, _res: Response, next: NextFunction) => {
@@ -36,7 +36,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 app.use(
 	(error: IErrorObject, _req: Request, res: Response, _next: NextFunction) => {
 		console.error('🛑 Error: ' + error.message);
-		res.status(error.status || 500).send({
+		return res.status(error.status || 500).send({
 			success: false,
 			message: error.message || 'Internal Server Error!',
 		});
@@ -56,4 +56,3 @@ const startServer = async () => {
 startServer().catch(console.dir);
 
 export default app;
-

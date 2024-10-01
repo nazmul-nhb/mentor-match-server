@@ -1,11 +1,11 @@
-import { Document } from "mongoose";
+import { Document } from 'mongoose';
 
-export interface IProduct {
-	title: string;
-	price: number;
-	productImage: string;
-	createdAt: Date;
+export interface IUser extends Document {
+	name: string;
+	age: number;
+	email: string;
+	password: string;
+	image: string;
+	role: 'student' | 'trainer' | 'admin';
+	created: Date;
 }
-
-export type ProductDocument = IProduct & Document;
-

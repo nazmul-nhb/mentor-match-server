@@ -1,10 +1,13 @@
 export interface IErrorObject extends Error {
 	status?: number;
+	code?: number;
 }
 
-export interface IProductDetails {
-	title: string;
-	price: number;
-	productImage: string;
+export interface IUserDetails {
+	name: string;
+	age: number;
+	email: string;
+	password: string;
+	image: string;
+	role: 'student' | 'trainer' | 'admin';
 }
-
