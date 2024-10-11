@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { IUserDetails } from '../types/interfaces';
 import { User } from '../models/userModel';
-import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 
 // Create New User
@@ -40,13 +39,6 @@ export const createUser = async (
 					message: 'This Email is Already Registered!',
 				});
 			}
-		}
-
-		if (error instanceof z.ZodError) {
-			return res.status(400).json({
-				success: false,
-				message: error.errors[0].message,
-			});
 		}
 		
 		next(error);
