@@ -5,7 +5,7 @@ export const validatePassword = (password: TPassword): IValidationResult => {
 	// Check for proper type
 	if (typeof password !== 'string') {
 		return {
-			validatedPassword: null,
+			validPassword: null,
 			validationError: 'Password must be a string!',
 		};
 	}
@@ -15,7 +15,7 @@ export const validatePassword = (password: TPassword): IValidationResult => {
 	// CHeck if the trimmed password is empty
 	if (!trimmedPassword) {
 		return {
-			validatedPassword: null,
+			validPassword: null,
 			validationError: 'Password cannot be empty!',
 		};
 	}
@@ -23,14 +23,14 @@ export const validatePassword = (password: TPassword): IValidationResult => {
 	// Check if the password is at least 6 characters long
 	if (trimmedPassword.length < 6) {
 		return {
-			validatedPassword: null,
+			validPassword: null,
 			validationError: 'Password must be 6 characters or more!',
 		};
 	}
 
 	// Return the valid, trimmed password
 	return {
-		validatedPassword: trimmedPassword,
+		validPassword: trimmedPassword,
 		validationError: null,
 	};
 };

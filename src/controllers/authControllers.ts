@@ -16,11 +16,9 @@ export const createUser = async (
 		const user = req.body;
 
 		// Validate Password using Custom Function
-		const { validatedPassword, validationError } = validatePassword(
-			user.password,
-		);
+		const { validPassword, validationError } = validatePassword(user.password);
 
-		if (!validatedPassword) {
+		if (!validPassword) {
 			return res.status(400).send({
 				success: false,
 				message: validationError,
@@ -28,7 +26,7 @@ export const createUser = async (
 		}
 
 		// generate hashed password
-		const hashedPassword = await bcrypt.hash(validatedPassword, 13);
+		const hashedPassword = await bcrypt.hash(validPassword, 13);
 
 		user.password = hashedPassword;
 
@@ -70,9 +68,9 @@ export const loginUser = async (
 		const { email, password } = req.body;
 
 		// Validate Password using Custom Function
-		const { validatedPassword, validationError } = validatePassword(password);
+		const { validPassword, validationError } = validatePassword(password);
 
-		if (!validatedPassword) {
+		if (!validPassword) {
 			return res.status(400).send({
 				success: false,
 				message: validationError,
@@ -88,10 +86,7 @@ export const loginUser = async (
 			});
 		}
 
-		const passwordMatched = await bcrypt.compare(
-			validatedPassword,
-			user.password,
-		);
+		const passwordMatched = await bcrypt.compare(validPassword, user.password);
 
 		if (!passwordMatched) {
 			return res.status(401).send({

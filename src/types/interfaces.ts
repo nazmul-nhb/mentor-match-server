@@ -17,6 +17,6 @@ export interface ICredentials {
 }
 
 export interface IValidationResult {
-	validatedPassword: string | null;
+	validPassword: string | null;
 	validationError: string | null;
 }
