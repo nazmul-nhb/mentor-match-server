@@ -16,8 +16,10 @@ export const createUser = async (
 		const user = req.body;
 
 		// Validate Password using Custom Function
-		const {validatedPassword, validationError} = validatePassword(user.password);
-		
+		const { validatedPassword, validationError } = validatePassword(
+			user.password,
+		);
+
 		if (!validatedPassword) {
 			return res.status(400).send({
 				success: false,
@@ -44,6 +46,8 @@ export const createUser = async (
 		}
 	} catch (error) {
 		if (error instanceof Error) {
+			console.error(error.message);
+
 			if ((error as any).code === 11000) {
 				return res.status(400).send({
 					success: false,
@@ -62,36 +66,65 @@ export const loginUser = async (
 	res: Response,
 	next: NextFunction,
 ) => {
-	const { email, password } = req.body;
-	const user = await User.findOne({ email });
+	try {
+		const { email, password } = req.body;
 
-	if (!user) {
-		return res.status(404).send({
-			success: false,
-			message: 'Invalid Credentials!',
+		// Validate Password using Custom Function
+		const { validatedPassword, validationError } = validatePassword(password);
+
+		if (!validatedPassword) {
+			return res.status(400).send({
+				success: false,
+				message: validationError,
+			});
+		}
+
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return res.status(404).send({
+				success: false,
+				message: 'Invalid Credentials!',
+			});
+		}
+
+		const passwordMatched = await bcrypt.compare(
+			validatedPassword,
+			user.password,
+		);
+
+		if (!passwordMatched) {
+			return res.status(401).send({
+				success: false,
+				message: 'Invalid Credentials!',
+			});
+		}
+
+		// Delete password from user object
+		const { password: _, ...userWithoutPassword } = user.toObject();
+
+		// Generate access token
+		const accessToken = generateToken(
+			userWithoutPassword,
+			accessTokenSecret,
+			'1h',
+		);
+
+		return res.status(200).send({
+			success: true,
+			message: 'Successfully Logged In!',
+			accessToken,
 		});
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error(error.message);
+
+			return res.status(400).send({
+				success: false,
+				message: error.message,
+			});
+		}
+
+		next(error);
 	}
-
-	const passwordMatched = await bcrypt.compare(password, user.password);
-
-	if (!passwordMatched) {
-		return res.status(401).send({
-			success: false,
-			message: 'Invalid Credentials!',
-		});
-	}
-
-	const { password: _, ...userWithoutPassword } = user.toObject();
-
-	const accessToken = generateToken(
-		userWithoutPassword,
-		accessTokenSecret,
-		'1h',
-	);
-
-	return res.status(200).send({
-		success: true,
-		message: 'Successfully Logged In!',
-		accessToken,
-	});
 };
