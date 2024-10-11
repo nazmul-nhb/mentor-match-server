@@ -10,6 +10,10 @@ export const UserSchema = new Schema<IUser>({
 	age: {
 		type: Number,
 		required: [true, 'User Must Provide Age!'],
+		validate: {
+			validator: (value: number) => value >= 13,
+			message: 'User must be at least 13 years old!',
+		},
 	},
 	email: {
 		type: String,
@@ -36,7 +40,7 @@ export const UserSchema = new Schema<IUser>({
 		type: String,
 		enum: {
 			values: ['student', 'trainer', 'admin'],
-			message: '${VALUE} is not a valid user role!',
+			message: '{VALUE} is not a valid user role!',
 		},
 		required: [true, 'User Must Provide Role!'],
 		trim: true,
