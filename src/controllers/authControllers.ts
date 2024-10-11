@@ -17,10 +17,10 @@ export const createUser = async (
 		const rawPassword = user.password.trim();
 
 		// Validate Password
-		if (!rawPassword || !rawPassword.length) {
+		if (!rawPassword || rawPassword.length < 6) {
 			return res.status(400).send({
 				success: false,
-				message: 'Password cannot be empty!',
+				message: 'Password must be 6 characters or more!',
 			});
 		}
 
