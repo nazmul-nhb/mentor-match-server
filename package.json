@@ -1,7 +1,7 @@
 {
 	"name": "mentor-match-server",
 	"version": "1.0.0",
-	"main": "index.js",
+	"main": "src/index.ts",
 	"scripts": {
 		"dev": "nodemon src/index.ts",
 		"build": "rimraf dist && tsc",
@@ -23,7 +23,7 @@
 		"email": "nazmulnhb@gmail.com"
 	},
 	"license": "ISC",
-	"description": "",
+	"description": "Server for Mentor Match",
 	"dependencies": {
 		"bcryptjs": "^2.4.3",
 		"cors": "^2.8.5",
