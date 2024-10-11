@@ -1,10 +1,5 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-// Import MongoDB uri from the .env file
-const mongoURI = process.env.MONGO_CONNECTION_STRING as string;
+import { mongoURI } from '../utils/constants';
 
 // Connect to MongoDB using Mongoose
 export const connectDB = async () => {

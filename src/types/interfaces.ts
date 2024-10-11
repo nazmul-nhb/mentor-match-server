@@ -10,3 +10,8 @@ export interface IUserDetails {
 	image: string;
 	role: 'student' | 'trainer' | 'admin';
 }
+
+export interface ICredentials {
+	email: string;
+	password: string;
+}
