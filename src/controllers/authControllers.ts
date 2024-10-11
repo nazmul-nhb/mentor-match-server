@@ -4,6 +4,7 @@ import { User } from '../models/userModel';
 import bcrypt from 'bcryptjs';
 import { accessTokenSecret } from '../utils/constants';
 import { generateToken } from '../helpers/generateToken';
+import { validatePassword } from '../utils/passwordUtils';
 
 // Create New User
 export const createUser = async (
@@ -14,18 +15,18 @@ export const createUser = async (
 	try {
 		const user = req.body;
 
-		const rawPassword = user.password.trim();
-
-		// Validate Password
-		if (!rawPassword || rawPassword.length < 6) {
+		// Validate Password using Custom Function
+		const {validatedPassword, validationError} = validatePassword(user.password);
+		
+		if (!validatedPassword) {
 			return res.status(400).send({
 				success: false,
-				message: 'Password must be 6 characters or more!',
+				message: validationError,
 			});
 		}
 
 		// generate hashed password
-		const hashedPassword = await bcrypt.hash(rawPassword, 13);
+		const hashedPassword = await bcrypt.hash(validatedPassword, 13);
 
 		user.password = hashedPassword;
 

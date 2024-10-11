@@ -15,3 +15,8 @@ export interface ICredentials {
 	email: string;
 	password: string;
 }
+
+export interface IValidationResult {
+	validatedPassword: string | null;
+	validationError: string | null;
+}
