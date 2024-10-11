@@ -1,6 +1,7 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { port } from './utils/constants';
 import { connectDB } from './configs/db';
 import { IErrorObject } from './types/interfaces';
 import authRoutes from './routes/authRoutes';
@@ -8,7 +9,6 @@ import authRoutes from './routes/authRoutes';
 dotenv.config();
 
 const app: Application = express();
-const port = process.env.PORT || 4242;
 
 // Middlewares
 // TODO: Add CORS Options when project is done!
